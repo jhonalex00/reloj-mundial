@@ -731,7 +731,7 @@ body.dark .forecast-item:hover {
   border-color: rgba(255, 255, 255, 0.15);
 }
 .clock-wrapper{
-  transform: translateY(-230px); /* cambia -20 por lo que quieras */
+  transform: translateY(-130px); /* cambia -20 por lo que quieras */
 }
 .forecast{
   transform: scale(0.75);      /* 1.08 más grande / 0.95 más pequeño */
