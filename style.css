@@ -603,14 +603,11 @@ body.dark .ciudad-switch__select {
   }
 }
 
-@media (max-width: 768px){
-  .reloj, #reloj, .clock {  
-    .reloj, #reloj, .clock { position: relative; z-index: 1; }
-.panel, .card, .contenedor-clima { position: relative; z-index: 2; }
- /* pon aquí el selector REAL del reloj redondo */
-    width: min(360px, 88vw);
-    height: min(360px, 88vw);
-    margin: 10px auto 20px;
+@media (max-width: 768px) {
+  .contenedor, .container, .app, body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 }
 
@@ -731,11 +728,84 @@ body.dark .forecast-item {
 body.dark .forecast-item:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.15);
+/* ✅ FIX: mover el reloj distinto en PC y en móvil (sin solaparse) */
+:root{
+  --clock-shift: -230px;  /* PC: ajusta aquí si quieres */
 }
+
 .clock-wrapper{
-  transform: translateY(-230px); /* cambia -20 por lo que quieras */
+  transform: translateY(var(--clock-shift));
 }
+
+/* MÓVIL */
+@media (max-width: 520px){
+  :root{
+    --clock-shift: -20px; /* móvil: déjalo así */
+  }
+}
+
 .forecast{
   transform: scale(0.75);      /* 1.08 más grande / 0.95 más pequeño */
   transform-origin: top center;
+}
+/* ✅ FIX móvil: evitar que el panel y el reloj se solapen */
+@media (max-width: 600px) {
+
+  /* que la página se acomode en columna */
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* el panel ya NO debe estar absolute/fixed ni centrado con transform */
+  .panel, .card, .contenedor-clima {
+    position: static !important;
+    transform: none !important;
+    width: min(520px, 92vw);
+    margin: 16px auto 0;
+  }
+
+  /* el reloj también en flujo normal y responsive */
+  .reloj, #reloj, .clock {
+    position: static !important;
+    transform: none !important;
+    width: min(420px, 92vw);
+    height: auto;
+    margin: 18px auto 24px;
+  }
+}
+/* --- FIX MOBILE: evitar solape panel vs reloj --- */
+@media (max-width: 600px) {
+
+  /* El contenedor principal debe apilar en columna */
+  .contenedor,
+  .container,
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* El panel arriba y en flujo normal */
+  .panel, .card, .contenedor-clima {
+    position: relative !important;
+    z-index: 2;
+    margin-bottom: 16px;
+  }
+
+  /* El reloj en flujo normal (no absoluto) */
+  .reloj, #reloj, .clock {
+    position: relative !important;
+    z-index: 1;
+    margin-top: 12px;
+    width: min(320px, 92vw);
+    height: min(320px, 92vw);
+  }
+
+  /* Si el reloj se corta por algún contenedor */
+  body, html {
+    overflow-x: hidden;
+  }
 }
