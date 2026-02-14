@@ -603,16 +603,18 @@ body.dark .ciudad-switch__select {
   }
 }
 
-@media (max-width: 768px) {
-  .clock-wrapper,
-  .forecast {
-    max-width: 380px;
-  }
-  .forecast__list {
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 10px;
+@media (max-width: 768px){
+  .reloj, #reloj, .clock {  
+    .reloj, #reloj, .clock { position: relative; z-index: 1; }
+.panel, .card, .contenedor-clima { position: relative; z-index: 2; }
+ /* pon aquí el selector REAL del reloj redondo */
+    width: min(360px, 88vw);
+    height: min(360px, 88vw);
+    margin: 10px auto 20px;
   }
 }
+
+
 
 @media (max-width: 520px) {
   .topbar {
@@ -731,7 +733,7 @@ body.dark .forecast-item:hover {
   border-color: rgba(255, 255, 255, 0.15);
 }
 .clock-wrapper{
-  transform: translateY(-20px); /* cambia -20 por lo que quieras */
+  transform: translateY(-230px); /* cambia -20 por lo que quieras */
 }
 .forecast{
   transform: scale(0.75);      /* 1.08 más grande / 0.95 más pequeño */
