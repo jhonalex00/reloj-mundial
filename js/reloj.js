@@ -1,3 +1,5 @@
+// reloj.js
+
 const $hora = document.querySelector(".hour");
 const $minuto = document.querySelector(".minute");
 const $segundo = document.querySelector(".second");
@@ -23,7 +25,7 @@ function horaZona(zona) {
   return { h: get("hour"), m: get("minute"), s: get("second") };
 }
 
-// LERP para suavizar (0.0–1.0) -> cuanto más cerca de 1, más “pegado” al objetivo
+// LERP para suavizar (0.0–1.0) -> cuanto más cerca de 1, más "pegado" al objetivo
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
@@ -40,18 +42,34 @@ function tick(getEstado) {
   const ahora = new Date();
   const { zonaActiva } = getEstado(); // OJO: esto debe ser timeZone real (Europe/Madrid, etc)
 
-  // Digital
-  $horaDigital.textContent = new Intl.DateTimeFormat("es-ES", {
+  // --- DIGITAL CON AM/PM ---
+  // Obtenemos la hora en formato 12h con indicador AM/PM
+  const timeParts = new Intl.DateTimeFormat("es-ES", {
     timeZone: zonaActiva,
-    timeStyle: "medium",
-  }).format(ahora);
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).formatToParts(ahora);
 
+  // Extraemos cada parte (hora, minuto, segundo, dayPeriod)
+  const getPart = (type) => timeParts.find((p) => p.type === type)?.value || "";
+  
+  const hDigital = getPart("hour");
+  const mDigital = getPart("minute");
+  const sDigital = getPart("second");
+  const ampm = getPart("dayPeriod"); // "a. m." o "p. m."
+
+  // Format: 08:10:36 PM
+  $horaDigital.textContent = `${hDigital}:${mDigital}:${sDigital} ${ampm}`;
+
+  // Fecha
   $fechaDigital.textContent = new Intl.DateTimeFormat("es-ES", {
     timeZone: zonaActiva,
     dateStyle: "full",
   }).format(ahora);
 
-  // Analógico
+  // --- ANALÓGICO (Sin cambios) ---
   const { h, m, s } = horaZona(zonaActiva);
   const ms = ahora.getMilliseconds();
 
