@@ -1,5 +1,5 @@
-const $selectZona = document.querySelector("#zona");
-const $selectCiudad = document.querySelector("#ciudad");
+const $selectZona = document.querySelector("#zona");      // UI: "País"
+const $selectCiudad = document.querySelector("#ciudad");  // UI: "Ciudad" (dependiente)
 const $bandera = document.querySelector("#bandera-actual");
 
 const guardar = (k, v) => localStorage.setItem(k, v);
@@ -9,32 +9,93 @@ function avisarCambioEstado() {
   window.dispatchEvent(new Event("estado-cambio"));
 }
 
-/* ================= ZONAS (HORA) ================= */
+/* =========================
+   PAÍSES (lo que verá el usuario en "Zona")
+========================= */
 export const ZONAS = [
-  { nombre: "España (Madrid)", zona: "Europe/Madrid", bandera: "🇪🇸" },
-  { nombre: "Colombia (Bogotá)", zona: "America/Bogota", bandera: "🇨🇴" },
-  { nombre: "Alemania (Berlín)", zona: "Europe/Berlin", bandera: "🇩🇪" },
-  { nombre: "México (CDMX)", zona: "America/Mexico_City", bandera: "🇲🇽" },
-  { nombre: "Argentina (Buenos Aires)", zona: "America/Argentina/Buenos_Aires", bandera: "🇦🇷" },
-  { nombre: "Japón (Tokio)", zona: "Asia/Tokyo", bandera: "🇯🇵" },
+  { id: "co", nombre: "Colombia", bandera: "🇨🇴" },
+  { id: "es", nombre: "España", bandera: "🇪🇸" },
+  { id: "de", nombre: "Alemania", bandera: "🇩🇪" },
+  { id: "mx", nombre: "México", bandera: "🇲🇽" },
+  { id: "ar", nombre: "Argentina", bandera: "🇦🇷" },
+  { id: "jp", nombre: "Japón", bandera: "🇯🇵" },
+  { id: "us", nombre: "Estados Unidos", bandera: "🇺🇸" },
+  { id: "gl", nombre: "Groenlandia", bandera: "🇬🇱" },
+
 ];
 
-/* ================= CIUDADES (CLIMA) ================= */
-export const CIUDADES_CLIMA = [
-  { id: "medellin", nombre: "Medellín", lat: 6.2442, lon: -75.5812, zona: "America/Bogota" },
-  { id: "bogota", nombre: "Bogotá", lat: 4.7110, lon: -74.0721, zona: "America/Bogota" },
+/* =========================
+   5 CIUDADES PRINCIPALES POR PAÍS (REQUERIMIENTO)
+   - lat/lon para clima
+   - tz para reloj
+========================= */
+const CIUDADES_POR_PAIS = {
+  co: [
+    { id: "bogota", nombre: "Bogotá", lat: 4.7110, lon: -74.0721, tz: "America/Bogota" },
+    { id: "medellin", nombre: "Medellín", lat: 6.2442, lon: -75.5812, tz: "America/Bogota" },
+    { id: "cali", nombre: "Cali", lat: 3.4516, lon: -76.5320, tz: "America/Bogota" },
+    { id: "barranquilla", nombre: "Barranquilla", lat: 10.9639, lon: -74.7964, tz: "America/Bogota" },
+    { id: "cartagena", nombre: "Cartagena", lat: 10.3910, lon: -75.4794, tz: "America/Bogota" },
+  ],
+  es: [
+    { id: "madrid", nombre: "Madrid", lat: 40.4168, lon: -3.7038, tz: "Europe/Madrid" },
+    { id: "barcelona", nombre: "Barcelona", lat: 41.3874, lon: 2.1686, tz: "Europe/Madrid" },
+    { id: "valencia", nombre: "Valencia", lat: 39.4699, lon: -0.3763, tz: "Europe/Madrid" },
+    { id: "sevilla", nombre: "Sevilla", lat: 37.3891, lon: -5.9845, tz: "Europe/Madrid" },
+    { id: "granada", nombre: "Granada", lat: 37.1882, lon: -3.6067, tz: "Europe/Madrid" },
+  ],
+  de: [
+    { id: "berlin", nombre: "Berlín", lat: 52.5200, lon: 13.4050, tz: "Europe/Berlin" },
+    { id: "hamburg", nombre: "Hamburgo", lat: 53.5511, lon: 9.9937, tz: "Europe/Berlin" },
+    { id: "munich", nombre: "Múnich", lat: 48.1351, lon: 11.5820, tz: "Europe/Berlin" },
+    { id: "gimte", nombre: "Gimte", lat: 51.4156, lon: 9.64, tz: "Europe/Berlin" },
+    { id: "hann_munden", nombre: "Hann. Münden", lat: 51.4150, lon: 9.65, tz: "Europe/Berlin" },
+  ],
+  mx: [
+    { id: "cdmx", nombre: "CDMX", lat: 19.4326, lon: -99.1332, tz: "America/Mexico_City" },
+    { id: "guadalajara", nombre: "Guadalajara", lat: 20.6597, lon: -103.3496, tz: "America/Mexico_City" },
+    { id: "monterrey", nombre: "Monterrey", lat: 25.6866, lon: -100.3161, tz: "America/Mexico_City" },
+    { id: "puebla", nombre: "Puebla", lat: 19.0414, lon: -98.2063, tz: "America/Mexico_City" },
+    { id: "cancun", nombre: "Cancún", lat: 21.1619, lon: -86.8515, tz: "America/Mexico_City" },
+  ],
+  ar: [
+    { id: "buenosaires", nombre: "Buenos Aires", lat: -34.6037, lon: -58.3816, tz: "America/Argentina/Buenos_Aires" },
+    { id: "cordoba", nombre: "Córdoba", lat: -31.4201, lon: -64.1888, tz: "America/Argentina/Buenos_Aires" },
+    { id: "rosario", nombre: "Rosario", lat: -32.9442, lon: -60.6505, tz: "America/Argentina/Buenos_Aires" },
+    { id: "mendoza", nombre: "Mendoza", lat: -32.8895, lon: -68.8458, tz: "America/Argentina/Buenos_Aires" },
+    { id: "mardelplata", nombre: "Mar del Plata", lat: -38.0055, lon: -57.5426, tz: "America/Argentina/Buenos_Aires" },
+  ],
+  jp: [
+    { id: "tokyo", nombre: "Tokio", lat: 35.6762, lon: 139.6503, tz: "Asia/Tokyo" },
+    { id: "osaka", nombre: "Osaka", lat: 34.6937, lon: 135.5023, tz: "Asia/Tokyo" },
+    { id: "kyoto", nombre: "Kioto", lat: 35.0116, lon: 135.7681, tz: "Asia/Tokyo" },
+    { id: "sapporo", nombre: "Sapporo", lat: 43.0618, lon: 141.3545, tz: "Asia/Tokyo" },
+    { id: "fukuoka", nombre: "Fukuoka", lat: 33.5902, lon: 130.4017, tz: "Asia/Tokyo" },
+  ],
+    us: [
+    { id: "newyork", nombre: "New York", lat: 40.7128, lon: -74.0060, tz: "America/New_York" },
+    { id: "miami", nombre: "Miami", lat: 25.7617, lon: -80.1918, tz: "America/New_York" },
+    { id: "chicago", nombre: "Chicago", lat: 41.8781, lon: -87.6298, tz: "America/Chicago" },
+    { id: "denver", nombre: "Denver", lat: 39.7392, lon: -104.9903, tz: "America/Denver" },
+    { id: "losangeles", nombre: "Los Ángeles", lat: 34.0522, lon: -118.2437, tz: "America/Los_Angeles" },
+  ],
+  gl: [
+    { id: "nuuk", nombre: "Nuuk", lat: 64.1814, lon: -51.6941, tz: "America/Nuuk" },
+    { id: "sisimiut", nombre: "Sisimiut", lat: 66.9395, lon: -53.6735, tz: "America/Nuuk" },
+    { id: "ilulissat", nombre: "Ilulissat", lat: 69.2167, lon: -51.1000, tz: "America/Nuuk" },
+    { id: "aqaurtoq", nombre: "Aasiaat", lat: 68.7098, lon: -52.8696, tz: "America/Nuuk" },
+    { id: "tasiilaq", nombre: "Tasiilaq", lat: 65.6145, lon: -37.6336, tz: "America/Nuuk" },
+  ],
 
-  { id: "madrid", nombre: "Madrid", lat: 40.4168, lon: -3.7038, zona: "Europe/Madrid" },
-  { id: "granada", nombre: "Granada", lat: 37.1882, lon: -3.6067, zona: "Europe/Madrid" },
+};
 
-  // ✅ la vuelvo a activar para que no haya inconsistencias
-  { id: "berlin", nombre: "Berlín", lat: 52.5200, lon: 13.4050, zona: "Europe/Berlin" },
-  { id: "munich", nombre: "Múnich", lat: 48.1351, lon: 11.5820, zona: "Europe/Berlin" },
-  { id: "gimte", nombre: "Gimte (Alemania)", lat: 51.4156, lon: 9.64, zona: "Europe/Berlin" },
-  { id: "hann_munden", nombre: "Hann. Münden (Alemania)", lat: 51.4150, lon: 9.65, zona: "Europe/Berlin" },
-];
+/* =========================
+   COMPATIBILIDAD con tu reloj.js y clima.js
+   - reloj.js usa getEstado().zonaActiva como timeZone ✅
+   - clima.js usa getEstado().ciudadObj (lat/lon/nombre) ✅
+========================= */
+export const CIUDADES_CLIMA = []; // (no se usa ya, lo dejo por compatibilidad si algún import existe)
 
-/* Para zonas sin ciudad, usamos capital */
 export const CLIMA_POR_ZONA = {
   "Europe/Madrid": { lat: 40.4168, lon: -3.7038, ciudad: "Madrid" },
   "America/Bogota": { lat: 4.7110, lon: -74.0721, ciudad: "Bogotá" },
@@ -44,99 +105,99 @@ export const CLIMA_POR_ZONA = {
   "Asia/Tokyo": { lat: 35.6762, lon: 139.6503, ciudad: "Tokio" },
 };
 
-const ZONAS_CON_CIUDAD = new Set(["Europe/Madrid", "America/Bogota", "Europe/Berlin"]);
+/* =========================
+   ESTADO
+========================= */
+let paisActivo = "co";                 // país seleccionado (co/es/de...)
+let ciudadActiva = "bogota";           // id ciudad
+let zonaActiva = "America/Bogota";     // ✅ timeZone real (para reloj.js)
 
-let zonaActiva = "Europe/Madrid";
-let ciudadActiva = "madrid";
-
-function poblarZonas() {
-  $selectZona.innerHTML = ZONAS.map((z) => `<option value="${z.zona}">${z.nombre}</option>`).join("");
+/* =========================
+   UI
+========================= */
+function poblarPaises() {
+  $selectZona.innerHTML = ZONAS.map(
+    (p) => `<option value="${p.id}">${p.nombre}</option>`
+  ).join("");
 }
 
-function poblarCiudades() {
-  $selectCiudad.innerHTML = CIUDADES_CLIMA.map((c) => `<option value="${c.id}">${c.nombre}</option>`).join("");
+function poblarCiudades(paisId) {
+  const lista = CIUDADES_POR_PAIS[paisId] || [];
+  $selectCiudad.innerHTML = lista.map(
+    (c) => `<option value="${c.id}">${c.nombre}</option>`
+  ).join("");
 }
 
 function actualizarBandera() {
-  const z = ZONAS.find((x) => x.zona === zonaActiva);
-  $bandera.textContent = z ? z.bandera : "🌍";
+  const p = ZONAS.find((x) => x.id === paisActivo);
+  $bandera.textContent = p ? p.bandera : "🌍";
 }
 
-function actualizarEstadoCiudad() {
-  const usaCiudad = ZONAS_CON_CIUDAD.has(zonaActiva);
-  $selectCiudad.disabled = !usaCiudad;
-  $selectCiudad.style.opacity = usaCiudad ? "1" : "0.5";
-  $selectCiudad.style.pointerEvents = usaCiudad ? "auto" : "none";
-}
+function setPais(paisId, forzarSelect = true) {
+  paisActivo = paisId;
+  guardar("pais", paisActivo);
+  if (forzarSelect) $selectZona.value = paisActivo;
 
-function aplicarZona(z) {
-  zonaActiva = z;
-  guardar("zona", zonaActiva);
-  $selectZona.value = zonaActiva;
   actualizarBandera();
-  actualizarEstadoCiudad();
-  avisarCambioEstado();
+  poblarCiudades(paisActivo);
+
+  // ciudad guardada válida o primera del país
+  const lista = CIUDADES_POR_PAIS[paisActivo] || [];
+  const guardada = leer("ciudad");
+  const existe = lista.some((c) => c.id === guardada);
+
+  setCiudad(existe ? guardada : (lista[0]?.id || ""), true);
 }
 
-function aplicarCiudad(id) {
-  ciudadActiva = id;
+function setCiudad(ciudadId, forzarSelect = true) {
+  const lista = CIUDADES_POR_PAIS[paisActivo] || [];
+  const c = lista.find((x) => x.id === ciudadId);
+  if (!c) return;
+
+  ciudadActiva = c.id;
+  zonaActiva = c.tz; // ✅ aquí está la magia: reloj usa timeZone real
+
   guardar("ciudad", ciudadActiva);
-  $selectCiudad.value = ciudadActiva;
-  avisarCambioEstado();
+  guardar("zona", zonaActiva); // opcional: guardo también timezone real
+  if (forzarSelect) $selectCiudad.value = ciudadActiva;
+
+  avisarCambioEstado(); // clima.js refresca inmediato + reloj ya usa zonaActiva
 }
 
-/* API para otros módulos */
+/* =========================
+   API para reloj.js y clima.js
+========================= */
 export function getEstado() {
+  const lista = CIUDADES_POR_PAIS[paisActivo] || [];
+  const ciudadObj = lista.find((c) => c.id === ciudadActiva) || null;
+
   return {
-    zonaActiva,
+    // lo que ya esperan tus módulos:
+    zonaActiva,          // ✅ timeZone real (Europe/Madrid, etc)
     ciudadActiva,
-    usaCiudad: ZONAS_CON_CIUDAD.has(zonaActiva),
-    ciudadObj: CIUDADES_CLIMA.find((c) => c.id === ciudadActiva) || null,
+    usaCiudad: true,     // siempre porque el sistema es por ciudad
+    ciudadObj,           // ✅ {lat,lon,nombre,tz}
     climaZonaObj: CLIMA_POR_ZONA[zonaActiva] || null,
+
+    // extra útil:
+    paisActivo,
   };
 }
 
 export function iniciarCiudades() {
   if (!$selectZona || !$selectCiudad || !$bandera) return;
 
-  poblarZonas();
-  poblarCiudades();
+  poblarPaises();
 
-  aplicarZona(leer("zona") || "Europe/Madrid");
-  aplicarCiudad(leer("ciudad") || "madrid");
-
-  // Si la ciudad pertenece a otra zona, ajustamos zona automáticamente
-  const c = CIUDADES_CLIMA.find((x) => x.id === ciudadActiva);
-  if (c) aplicarZona(c.zona);
-
-  actualizarBandera();
-  actualizarEstadoCiudad();
+  // defaults guardados
+  const paisGuardado = leer("pais") || "co";
+  setPais(paisGuardado, true);
 
   $selectZona.addEventListener("change", (e) => {
-    aplicarZona(e.target.value);
-
-    if (zonaActiva === "Europe/Madrid") {
-      const last = leer("ciudad");
-      const ok = last === "madrid" || last === "granada";
-      aplicarCiudad(ok ? last : "madrid");
-    }
-
-    if (zonaActiva === "America/Bogota") {
-      const last = leer("ciudad");
-      const ok = last === "medellin" || last === "bogota";
-      aplicarCiudad(ok ? last : "medellin");
-    }
-
-    if (zonaActiva === "Europe/Berlin") {
-      const last = leer("ciudad");
-      const esDE = ["berlin", "munich", "gimte", "hann_munden"].includes(last);
-      aplicarCiudad(esDE ? last : "hann_munden"); // ✅ sin parámetro basura
-    }
+    setPais(e.target.value, true);
   });
 
   $selectCiudad.addEventListener("change", (e) => {
-    aplicarCiudad(e.target.value);
-    const c = CIUDADES_CLIMA.find((x) => x.id === ciudadActiva);
-    if (c) aplicarZona(c.zona);
+    setCiudad(e.target.value, true);
   });
 }

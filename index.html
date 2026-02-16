@@ -35,15 +35,24 @@
 
       <div class="controls">
 
+        <!-- Selector de ZONA (País) -->
         <div class="zona-switch" aria-label="Seleccionar zona horaria">
           <span id="bandera-actual" aria-hidden="true">🌍</span>
           <label for="zona">Zona</label>
-          <select id="zona" aria-label="Zona horaria"></select>
+          <select id="zona" aria-label="Zona horaria">
+             <!-- Opción por defecto opcional -->
+             <option value="" disabled selected>Seleccionar País</option>
+          </select>
         </div>
 
+        <!-- Selector de CIUDAD (Modificado: empieza disabled) -->
         <div class="ciudad-switch" aria-label="Seleccionar ciudad para clima">
           <label class="ciudad-switch__label" for="ciudad">Ciudad</label>
-          <select id="ciudad" class="ciudad-switch__select" aria-label="Ciudad"></select>
+          <!-- AQUÍ ESTÁ EL CAMBIO: se agregó el atributo 'disabled' -->
+          <select id="ciudad" class="ciudad-switch__select"></select>
+
+            <option value=""></option>
+          </select>
         </div>
 
         <div class="theme-switch" aria-label="Cambiar tema">
