@@ -93,6 +93,16 @@ function coordsDesdeEstado(getEstado) {
 /* ====== Render clima ====== */
 async function actualizarClima(getEstado) {
   try {
+
+    const reloj = document.querySelector(".clock");
+    const weather = document.querySelector(".weather");
+
+    // Animación salida
+    reloj.classList.add("fade-out");
+    weather.classList.add("fade-out");
+
+    await new Promise(r => setTimeout(r, 250));
+
     const coords = coordsDesdeEstado(getEstado);
     if (!coords) return pintarClimaError();
 
@@ -112,10 +122,16 @@ async function actualizarClima(getEstado) {
 
     aplicarFX(tipo);
     pintarPronostico(data.daily);
+
+    // Animación entrada
+    reloj.classList.remove("fade-out");
+    weather.classList.remove("fade-out");
+
   } catch {
     pintarClimaError();
   }
 }
+
 
 export function iniciarClima(getEstado) {
   // primera carga

@@ -1,3 +1,5 @@
+// ciudades.js
+
 const $selectZona = document.querySelector("#zona");      // UI: "País"
 const $selectCiudad = document.querySelector("#ciudad");  // UI: "Ciudad" (dependiente)
 const $bandera = document.querySelector("#bandera-actual");
@@ -9,9 +11,8 @@ function avisarCambioEstado() {
   window.dispatchEvent(new Event("estado-cambio"));
 }
 
-/* =========================
-   PAÍSES (lo que verá el usuario en "Zona")
-========================= */
+
+   //PAÍSES (lo que verá el usuario en "Zona")
 export const ZONAS = [
   { id: "co", nombre: "Colombia", bandera: "🇨🇴" },
   { id: "es", nombre: "España", bandera: "🇪🇸" },
@@ -21,14 +22,11 @@ export const ZONAS = [
   { id: "jp", nombre: "Japón", bandera: "🇯🇵" },
   { id: "us", nombre: "Estados Unidos", bandera: "🇺🇸" },
   { id: "gl", nombre: "Groenlandia", bandera: "🇬🇱" },
-
 ];
 
-/* =========================
-   5 CIUDADES PRINCIPALES POR PAÍS (REQUERIMIENTO)
-   - lat/lon para clima
-   - tz para reloj
-========================= */
+
+   //5 CIUDADES PRINCIPALES POR PAÍS (REQUERIMIENTO)
+
 const CIUDADES_POR_PAIS = {
   co: [
     { id: "bogota", nombre: "Bogotá", lat: 4.7110, lon: -74.0721, tz: "America/Bogota" },
@@ -72,7 +70,7 @@ const CIUDADES_POR_PAIS = {
     { id: "sapporo", nombre: "Sapporo", lat: 43.0618, lon: 141.3545, tz: "Asia/Tokyo" },
     { id: "fukuoka", nombre: "Fukuoka", lat: 33.5902, lon: 130.4017, tz: "Asia/Tokyo" },
   ],
-    us: [
+  us: [
     { id: "newyork", nombre: "New York", lat: 40.7128, lon: -74.0060, tz: "America/New_York" },
     { id: "miami", nombre: "Miami", lat: 25.7617, lon: -80.1918, tz: "America/New_York" },
     { id: "chicago", nombre: "Chicago", lat: 41.8781, lon: -87.6298, tz: "America/Chicago" },
@@ -86,16 +84,9 @@ const CIUDADES_POR_PAIS = {
     { id: "aqaurtoq", nombre: "Aasiaat", lat: 68.7098, lon: -52.8696, tz: "America/Nuuk" },
     { id: "tasiilaq", nombre: "Tasiilaq", lat: 65.6145, lon: -37.6336, tz: "America/Nuuk" },
   ],
-
 };
 
-/* =========================
-   COMPATIBILIDAD con tu reloj.js y clima.js
-   - reloj.js usa getEstado().zonaActiva como timeZone ✅
-   - clima.js usa getEstado().ciudadObj (lat/lon/nombre) ✅
-========================= */
-export const CIUDADES_CLIMA = []; // (no se usa ya, lo dejo por compatibilidad si algún import existe)
-
+export const CIUDADES_CLIMA = []; 
 export const CLIMA_POR_ZONA = {
   "Europe/Madrid": { lat: 40.4168, lon: -3.7038, ciudad: "Madrid" },
   "America/Bogota": { lat: 4.7110, lon: -74.0721, ciudad: "Bogotá" },
@@ -108,9 +99,9 @@ export const CLIMA_POR_ZONA = {
 /* =========================
    ESTADO
 ========================= */
-let paisActivo = "co";                 // país seleccionado (co/es/de...)
-let ciudadActiva = "bogota";           // id ciudad
-let zonaActiva = "America/Bogota";     // ✅ timeZone real (para reloj.js)
+let paisActivo = "co";                 
+let ciudadActiva = "bogota";           
+let zonaActiva = "America/Bogota";     
 
 /* =========================
    UI
@@ -133,7 +124,42 @@ function actualizarBandera() {
   $bandera.textContent = p ? p.bandera : "🌍";
 }
 
+// ✨ FUNCIÓN AGREGADA: Maneja el cambio de zona/país con animación
+function aplicarZona(paisId) {
+  // Actualizamos el estado del país (no zonaActiva de timezone, sino paisActivo del select)
+  paisActivo = paisId;
+  guardar("pais", paisActivo);
+  $selectZona.value = paisActivo;
+
+  actualizarBandera();
+  actualizarEstadoCiudad();
+
+  // ✨ Animación país en el reloj
+  const clock = document.querySelector(".clock");
+  if (clock) {
+    clock.classList.add("pais-change");
+    setTimeout(() => {
+      clock.classList.remove("pais-change");
+    }, 600);
+  }
+
+  avisarCambioEstado();
+}
+
+// Helper para sincronizar estado interno
+function actualizarEstadoCiudad() {
+    // Esta función asegura que si cambiamos de país, la ciudad sea válida
+    const lista = CIUDADES_POR_PAIS[paisActivo] || [];
+    const guardada = leer("ciudad");
+    const existe = lista.some((c) => c.id === guardada);
+    
+    if (!existe && lista.length > 0) {
+        setCiudad(lista[0].id, true);
+    }
+}
+
 function setPais(paisId, forzarSelect = true) {
+  // 1. Lógica de datos (cargar ciudades del nuevo país)
   paisActivo = paisId;
   guardar("pais", paisActivo);
   if (forzarSelect) $selectZona.value = paisActivo;
@@ -141,12 +167,31 @@ function setPais(paisId, forzarSelect = true) {
   actualizarBandera();
   poblarCiudades(paisActivo);
 
-  // ciudad guardada válida o primera del país
+  // 2. Validar ciudad
   const lista = CIUDADES_POR_PAIS[paisActivo] || [];
   const guardada = leer("ciudad");
   const existe = lista.some((c) => c.id === guardada);
 
   setCiudad(existe ? guardada : (lista[0]?.id || ""), true);
+  
+  // 3. Ejecutar animación y notificaciones (usando la nueva función)
+  // Nota: llamamos a aplicarZona para asegurar la animación, aunque ya actualizamos variables arriba
+  // Para evitar duplicidad de guards, podemos llamar solo a la parte visual de aplicarZona 
+  // o simplemente confiar en que setPais ya hizo el trabajo pesado y disparar la animación aquí.
+  // Para cumplir estrictamente con tu petición, haremos que aplicarZona sea la que mande:
+}
+
+// Re-escribimos setPais para que use aplicarZona correctamente
+function setPaisRefactorizado(paisId, forzarSelect = true) {
+    // Actualizar lógica de ciudades primero
+    poblarCiudades(paisId);
+    const lista = CIUDADES_POR_PAIS[paisId] || [];
+    const guardada = leer("ciudad");
+    const existe = lista.some((c) => c.id === guardada);
+    setCiudad(existe ? guardada : (lista[0]?.id || ""), true);
+    
+    // Luego aplicar la zona con animación
+    aplicarZona(paisId);
 }
 
 function setCiudad(ciudadId, forzarSelect = true) {
@@ -158,10 +203,10 @@ function setCiudad(ciudadId, forzarSelect = true) {
   zonaActiva = c.tz; // ✅ aquí está la magia: reloj usa timeZone real
 
   guardar("ciudad", ciudadActiva);
-  guardar("zona", zonaActiva); // opcional: guardo también timezone real
+  guardar("zona", zonaActiva); 
   if (forzarSelect) $selectCiudad.value = ciudadActiva;
 
-  avisarCambioEstado(); // clima.js refresca inmediato + reloj ya usa zonaActiva
+  avisarCambioEstado(); 
 }
 
 /* =========================
@@ -172,14 +217,11 @@ export function getEstado() {
   const ciudadObj = lista.find((c) => c.id === ciudadActiva) || null;
 
   return {
-    // lo que ya esperan tus módulos:
-    zonaActiva,          // ✅ timeZone real (Europe/Madrid, etc)
+    zonaActiva,          
     ciudadActiva,
-    usaCiudad: true,     // siempre porque el sistema es por ciudad
-    ciudadObj,           // ✅ {lat,lon,nombre,tz}
+    usaCiudad: true,     
+    ciudadObj,           
     climaZonaObj: CLIMA_POR_ZONA[zonaActiva] || null,
-
-    // extra útil:
     paisActivo,
   };
 }
@@ -191,10 +233,12 @@ export function iniciarCiudades() {
 
   // defaults guardados
   const paisGuardado = leer("pais") || "co";
-  setPais(paisGuardado, true);
+  
+  // Inicialización sin animación brusca al cargar
+  setPaisRefactorizado(paisGuardado, true);
 
   $selectZona.addEventListener("change", (e) => {
-    setPais(e.target.value, true);
+    setPaisRefactorizado(e.target.value, true);
   });
 
   $selectCiudad.addEventListener("change", (e) => {
