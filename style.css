@@ -23,6 +23,9 @@
   --clock-border: clamp(7px, 2vw, 12px);
   --clock-inner-ring: clamp(8px, 2.2vw, 10px);
   --clock-inset: clamp(14px, 4vw, 20px);
+
+  /* ✅ FIX: mover el reloj distinto en PC y en móvil (sin solaparse) */
+  --clock-shift: -230px; /* PC: ajusta aquí */
 }
 
 /* Themes */
@@ -116,7 +119,7 @@ body.dark .topbar {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* ✅ AÑADIDO: readout + brand (faltaban) */
+/* readout + brand */
 .readout {
   display: flex;
   flex-direction: column;
@@ -244,11 +247,7 @@ body.dark .clock {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  /*background: url("img/logo.png") center 18% / cover no-repeat;*/
-   background: url("https://picsum.photos/600") center / cover no-repeat;
-   /*background: url("./js/img/logo.png") center 18% / cover no-repeat;*/
-
-
+  background: url("https://picsum.photos/600") center / cover no-repeat;
   opacity: 0.25;
   z-index: 0;
   pointer-events: none;
@@ -496,6 +495,9 @@ body.dark .ciudad-switch__select {
   align-items: center;
   justify-content: center;
   position: relative;
+
+  /* ✅ shift en PC */
+  transform: translateY(var(--clock-shift));
 }
 
 .clock-wrapper .clock {
@@ -514,6 +516,10 @@ body.dark .ciudad-switch__select {
   padding: 25px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  /* Si quieres escalarlo, usa SOLO esto (evita dos transforms diferentes) */
+  transform: scale(0.75);
+  transform-origin: top center;
 }
 
 .forecast__title {
@@ -592,6 +598,60 @@ body.dark .ciudad-switch__select {
   font-size: 1rem;
 }
 
+/* Dark forecast */
+body.dark .forecast {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .forecast-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark .forecast-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   TRANSICIONES SUAVES
+========================= */
+.clock,
+.weather,
+.readout {
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: scale(0.96);
+  filter: blur(4px);
+}
+
+.fade-in {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* =========================
+   ANIMACIÓN CAMBIO PAÍS
+========================= */
+@keyframes giroSuave {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(90deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+.pais-change {
+  animation: giroSuave 0.6s ease;
+  transform-style: preserve-3d;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .main-content {
@@ -603,6 +663,7 @@ body.dark .ciudad-switch__select {
   }
 }
 
+/* Ajuste general en tablets */
 @media (max-width: 768px) {
   .contenedor, .container, .app, body {
     display: flex;
@@ -611,9 +672,12 @@ body.dark .ciudad-switch__select {
   }
 }
 
-
-
+/* ✅ MÓVIL: reduce el shift del reloj */
 @media (max-width: 520px) {
+  :root {
+    --clock-shift: -20px;
+  }
+
   .topbar {
     flex-direction: column;
     align-items: stretch;
@@ -628,7 +692,7 @@ body.dark .ciudad-switch__select {
   }
 
   .brand {
-    align-items: flex-start; /* ✅ mejor en móvil */
+    align-items: flex-start;
   }
 
   .controls {
@@ -714,73 +778,11 @@ body.dark .ciudad-switch__select {
   }
 }
 
-/* Dark forecast */
-body.dark .forecast {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark .forecast-item {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-body.dark .forecast-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
-/* ✅ FIX: mover el reloj distinto en PC y en móvil (sin solaparse) */
-:root{
-  --clock-shift: -230px;  /* PC: ajusta aquí si quieres */
-}
-
-.clock-wrapper{
-  transform: translateY(var(--clock-shift));
-}
-
-/* MÓVIL */
-/*@media (max-width: 520px){
-  :root{
-    --clock-shift: -20px; /* móvil: déjalo así */
- 
- /* }
-}
-
-.forecast{
-  transform: scale(0.75);      /* 1.08 más grande / 0.95 más pequeño */
-  transform-origin: top center;
-}
-/* ✅ FIX móvil: evitar que el panel y el reloj se solapen */
+/* ✅ ÚNICO FIX MOBILE (600px): evitar solape panel vs reloj
+   (unificado, sin duplicados) */
 @media (max-width: 600px) {
 
-  /* que la página se acomode en columna */
-  body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* el panel ya NO debe estar absolute/fixed ni centrado con transform */
-  .panel, .card, .contenedor-clima {
-    position: static !important;
-    transform: none !important;
-    width: min(520px, 92vw);
-    margin: 16px auto 0;
-  }
-
-  /* el reloj también en flujo normal y responsive */
-  .reloj, #reloj, .clock {
-    position: static !important;
-    transform: none !important;
-    width: min(420px, 92vw);
-    height: auto;
-    margin: 18px auto 24px;
-  }
-}
-/* --- FIX MOBILE: evitar solape panel vs reloj --- */
-@media (max-width: 600px) {
-
-  /* El contenedor principal debe apilar en columna */
+  /* contenedor principal en columna */
   .contenedor,
   .container,
   main {
@@ -789,62 +791,26 @@ body.dark .forecast-item:hover {
     align-items: center;
   }
 
-  /* El panel arriba y en flujo normal */
-  .panel, .card, .contenedor-clima {
+  /* panel arriba, en flujo normal */
+  .panel, .card, .contenedor-clima, .topbar {
     position: relative !important;
+    transform: none !important;
+    width: min(520px, 92vw);
+    margin: 16px auto 0;
     z-index: 2;
-    margin-bottom: 16px;
   }
 
-  /* El reloj en flujo normal (no absoluto) */
-  .reloj, #reloj, .clock {
+  /* reloj en flujo normal */
+  .reloj, #reloj, .clock, .clock-wrapper {
     position: relative !important;
+    transform: none !important; /* anula clock-shift aquí */
+    width: min(420px, 92vw);
+    height: min(420px, 92vw);
+    margin: 18px auto 24px;
     z-index: 1;
-    margin-top: 12px;
-    width: min(320px, 92vw);
-    height: min(320px, 92vw);
   }
 
-  /* Si el reloj se corta por algún contenedor */
-  body, html {
+  html, body {
     overflow-x: hidden;
   }
-}
-/* =========================
-   TRANSICIONES SUAVES
-========================= */
-
-.clock,
-.weather,
-.readout {
-  transition: 
-    opacity 0.35s ease,
-    transform 0.35s ease,
-    filter 0.35s ease;
-}
-
-.fade-out {
-  opacity: 0;
-  transform: scale(0.96);
-  filter: blur(4px);
-}
-
-.fade-in {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-}
-/* =========================
-   ANIMACIÓN CAMBIO PAÍS
-========================= */
-
-@keyframes giroSuave {
-  0% { transform: rotateY(0deg); }
-  50% { transform: rotateY(90deg); }
-  100% { transform: rotateY(0deg); }
-}
-
-.pais-change {
-  animation: giroSuave 0.6s ease;
-  transform-style: preserve-3d;
 }
