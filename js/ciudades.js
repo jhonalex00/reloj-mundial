@@ -15,6 +15,8 @@ function avisarCambioEstado() {
    //PAÍSES (lo que verá el usuario en "Zona")
 export const ZONAS = [
   { id: "co", nombre: "Colombia", bandera: "🇨🇴" },
+  { id: "ec", nombre: "Ecuador", bandera: "🇪🇨" },
+  { id: "pe", nombre: "Perú", bandera: "🇵🇪" },
   { id: "es", nombre: "España", bandera: "🇪🇸" },
   { id: "de", nombre: "Alemania", bandera: "🇩🇪" },
   { id: "mx", nombre: "México", bandera: "🇲🇽" },
@@ -22,6 +24,7 @@ export const ZONAS = [
   { id: "jp", nombre: "Japón", bandera: "🇯🇵" },
   { id: "us", nombre: "Estados Unidos", bandera: "🇺🇸" },
   { id: "gl", nombre: "Groenlandia", bandera: "🇬🇱" },
+  { id: "it", nombre: "Italia", bandera: "🇮🇹" },
 ];
 
 
@@ -31,9 +34,29 @@ const CIUDADES_POR_PAIS = {
   co: [
     { id: "bogota", nombre: "Bogotá", lat: 4.7110, lon: -74.0721, tz: "America/Bogota" },
     { id: "medellin", nombre: "Medellín", lat: 6.2442, lon: -75.5812, tz: "America/Bogota" },
+    { id: "envigado", nombre: "Envigado", lat: 6.1701, lon: -75.5841, tz: "America/Bogota" },
+    { id: "bello", nombre: "Bello", lat: 6.3377, lon: -75.5569, tz: "America/Bogota" },
+    { id: "itagui", nombre: "Itagüí", lat: 6.1846, lon: -75.5991, tz: "America/Bogota" },
     { id: "cali", nombre: "Cali", lat: 3.4516, lon: -76.5320, tz: "America/Bogota" },
     { id: "barranquilla", nombre: "Barranquilla", lat: 10.9639, lon: -74.7964, tz: "America/Bogota" },
     { id: "cartagena", nombre: "Cartagena", lat: 10.3910, lon: -75.4794, tz: "America/Bogota" },
+    { id: "laceja", nombre: "La Ceja", lat: 6.0313, lon: -75.4319, tz: "America/Bogota" },
+     { id: "rionegro", nombre: "Rionegro", lat: 6.1551, lon: -75.3737, tz: "America/Bogota" },
+
+  ],
+    ec: [
+    { id: "quito", nombre: "Quito", lat: -0.1807, lon: -78.4678, tz: "America/Guayaquil" },
+    { id: "guayaquil", nombre: "Guayaquil", lat: -2.1894, lon: -79.8890, tz: "America/Guayaquil" },
+    { id: "cuenca", nombre: "Cuenca", lat: -2.9001, lon: -79.0059, tz: "America/Guayaquil" },
+    { id: "ambato", nombre: "Ambato", lat: -1.2490, lon: -78.6167, tz: "America/Guayaquil" },
+    { id: "manta", nombre: "Manta", lat: -0.9677, lon: -80.7089, tz: "America/Guayaquil" },
+  ],
+  pe: [
+    { id: "lima", nombre: "Lima", lat: -12.0464, lon: -77.0428, tz: "America/Lima" },
+    { id: "arequipa", nombre: "Arequipa", lat: -16.4090, lon: -71.5375, tz: "America/Lima" },
+    { id: "trujillo", nombre: "Trujillo", lat: -8.1116, lon: -79.0288, tz: "America/Lima" },
+    { id: "chiclayo", nombre: "Chiclayo", lat: -6.7714, lon: -79.8414, tz: "America/Lima" },
+    { id: "cusco", nombre: "Cusco", lat: -13.5320, lon: -71.9675, tz: "America/Lima" },
   ],
   es: [
     { id: "madrid", nombre: "Madrid", lat: 40.4168, lon: -3.7038, tz: "Europe/Madrid" },
@@ -41,6 +64,16 @@ const CIUDADES_POR_PAIS = {
     { id: "valencia", nombre: "Valencia", lat: 39.4699, lon: -0.3763, tz: "Europe/Madrid" },
     { id: "sevilla", nombre: "Sevilla", lat: 37.3891, lon: -5.9845, tz: "Europe/Madrid" },
     { id: "granada", nombre: "Granada", lat: 37.1882, lon: -3.6067, tz: "Europe/Madrid" },
+    { id: "malaga", nombre: "Málaga", lat: 36.7213, lon: -4.4214, tz: "Europe/Madrid" },
+    { id: "armilla", nombre: "Armilla", lat: 37.1433, lon: -3.6253, tz: "Europe/Madrid" },
+
+  ],
+  it: [
+    { id: "roma", nombre: "Roma", lat: 41.9028, lon: 12.4964, tz: "Europe/Rome" },
+    { id: "milan", nombre: "Milán", lat: 45.4642, lon: 9.1900, tz: "Europe/Rome" },
+    { id: "napoles", nombre: "Nápoles", lat: 40.8518, lon: 14.2681, tz: "Europe/Rome" },
+    { id: "turin", nombre: "Turín", lat: 45.0703, lon: 7.6869, tz: "Europe/Rome" },
+    { id: "florencia", nombre: "Florencia", lat: 43.7696, lon: 11.2558, tz: "Europe/Rome" },
   ],
   de: [
     { id: "berlin", nombre: "Berlín", lat: 52.5200, lon: 13.4050, tz: "Europe/Berlin" },
@@ -86,7 +119,7 @@ const CIUDADES_POR_PAIS = {
   ],
 };
 
-export const CIUDADES_CLIMA = []; 
+//export const CIUDADES_CLIMA = []; 
 export const CLIMA_POR_ZONA = {
   "Europe/Madrid": { lat: 40.4168, lon: -3.7038, ciudad: "Madrid" },
   "America/Bogota": { lat: 4.7110, lon: -74.0721, ciudad: "Bogotá" },

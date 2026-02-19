@@ -15,3 +15,6 @@ function iniciarApp() {
 }
 
 iniciarApp();
+requestAnimationFrame(() => {
+  document.body.classList.add("app-ready");
+});

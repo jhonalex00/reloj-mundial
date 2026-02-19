@@ -7,6 +7,19 @@
 
   <meta name="theme-color" content="#2d9cdb" />
   <link rel="manifest" href="manifest.json" />
+
+  <!-- ✅ ARREGLO 1: Aplicar tema + modo ANTES de que pinte la página (anti-salto) -->
+  <script>
+    (function () {
+      try {
+        const tema = localStorage.getItem("tema") || "ocean";
+        const modo = localStorage.getItem("modo"); // "oscuro" | "claro"
+        document.documentElement.dataset.theme = tema;   // en vez de body para que sea instantáneo
+        if (modo === "oscuro") document.documentElement.classList.add("dark");
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 

@@ -814,3 +814,12 @@ body.dark .forecast-item:hover {
     overflow-x: hidden;
   }
 }
+/* Evita salto al recargar (se muestra cuando JS está listo) */
+body {
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+body.app-ready {
+  opacity: 1;
+}
