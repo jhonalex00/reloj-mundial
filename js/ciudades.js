@@ -13,16 +13,19 @@ function avisarCambioEstado() {
 
 //PAÍSES (lo que verá el usuario en "Zona")
 export const ZONAS = [
-  { id: "co", nombre: "Colombia", bandera: "🇨🇴" },
-  { id: "es", nombre: "España", bandera: "🇪🇸" },
-  { id: "de", nombre: "Alemania", bandera: "🇩🇪" },
-  { id: "mx", nombre: "México", bandera: "🇲🇽" },
-  { id: "ar", nombre: "Argentina", bandera: "🇦🇷" },
-  { id: "jp", nombre: "Japón", bandera: "🇯🇵" },
-  { id: "us", nombre: "Estados Unidos", bandera: "🇺🇸" },
-  { id: "gl", nombre: "Groenlandia", bandera: "🇬🇱" },
-  { id: "nz", nombre: "Nueva Zelanda", bandera: "🇳🇿" },
-  { id: "kr", nombre: "Corea del Sur", bandera: "🇰🇷" },
+    { id: "co", nombre: "Colombia", bandera: "🇨🇴" },
+    { id: "ec", nombre: "Ecuador", bandera: "🇪🇨" },
+    { id: "pe", nombre: "Perú", bandera: "🇵🇪" },
+    { id: "mx", nombre: "México", bandera: "🇲🇽" },
+    { id: "ar", nombre: "Argentina", bandera: "🇦🇷" },
+    { id: "us", nombre: "Estados Unidos", bandera: "🇺🇸" },
+    { id: "es", nombre: "España", bandera: "🇪🇸" },
+    { id: "de", nombre: "Alemania", bandera: "🇩🇪" }, 
+    { id: "jp", nombre: "Japón", bandera: "🇯🇵" },
+    { id: "gl", nombre: "Groenlandia", bandera: "🇬🇱" },
+    { id: "nz", nombre: "Nueva Zelanda", bandera: "🇳🇿" },
+    { id: "kr", nombre: "Corea del Sur", bandera: "🇰🇷" },
+
 ];
 
 //5 CIUDADES PRINCIPALES POR PAÍS (REQUERIMIENTO)
@@ -108,6 +111,20 @@ const CIUDADES_POR_PAIS = {
     },
     
   ],
+  ec: [
+  { id: "quito", nombre: "Quito", lat: -0.1807, lon: -78.4678, tz: "America/Guayaquil" },
+  { id: "guayaquil", nombre: "Guayaquil", lat: -2.1709, lon: -79.9224, tz: "America/Guayaquil" },
+  { id: "cuenca", nombre: "Cuenca", lat: -2.9006, lon: -79.0045, tz: "America/Guayaquil" },
+  { id: "ambato", nombre: "Ambato", lat: -1.2543, lon: -78.6228, tz: "America/Guayaquil" },
+  { id: "manta", nombre: "Manta", lat: -0.9677, lon: -80.7089, tz: "America/Guayaquil" }
+],
+pe: [
+  { id: "lima", nombre: "Lima", lat: -12.0464, lon: -77.0428, tz: "America/Lima" },
+  { id: "arequipa", nombre: "Arequipa", lat: -16.4090, lon: -71.5375, tz: "America/Lima" },
+  { id: "trujillo", nombre: "Trujillo", lat: -8.1091, lon: -79.0215, tz: "America/Lima" },
+  { id: "cusco", nombre: "Cusco", lat: -13.5319, lon: -71.9675, tz: "America/Lima" },
+  { id: "piura", nombre: "Piura", lat: -5.1945, lon: -80.6328, tz: "America/Lima" }
+],
   es: [
     {
       id: "madrid",
