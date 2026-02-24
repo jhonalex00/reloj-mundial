@@ -111,19 +111,79 @@ const CIUDADES_POR_PAIS = {
     },
     
   ],
-  ec: [
-  { id: "quito", nombre: "Quito", lat: -0.1807, lon: -78.4678, tz: "America/Guayaquil" },
-  { id: "guayaquil", nombre: "Guayaquil", lat: -2.1709, lon: -79.9224, tz: "America/Guayaquil" },
-  { id: "cuenca", nombre: "Cuenca", lat: -2.9006, lon: -79.0045, tz: "America/Guayaquil" },
-  { id: "ambato", nombre: "Ambato", lat: -1.2543, lon: -78.6228, tz: "America/Guayaquil" },
-  { id: "manta", nombre: "Manta", lat: -0.9677, lon: -80.7089, tz: "America/Guayaquil" }
+ ec: [
+  {
+    id: "quito",
+    nombre: "Quito",
+    lat: -0.1807,
+    lon: -78.4678,
+    tz: "America/Guayaquil",
+  },
+  {
+    id: "guayaquil",
+    nombre: "Guayaquil",
+    lat: -2.1709,
+    lon: -79.9224,
+    tz: "America/Guayaquil",
+  },
+  {
+    id: "cuenca",
+    nombre: "Cuenca",
+    lat: -2.9006,
+    lon: -79.0045,
+    tz: "America/Guayaquil",
+  },
+  {
+    id: "ambato",
+    nombre: "Ambato",
+    lat: -1.2543,
+    lon: -78.6228,
+    tz: "America/Guayaquil",
+  },
+  {
+    id: "manta",
+    nombre: "Manta",
+    lat: -0.9677,
+    lon: -80.7089,
+    tz: "America/Guayaquil",
+  }
 ],
 pe: [
-  { id: "lima", nombre: "Lima", lat: -12.0464, lon: -77.0428, tz: "America/Lima" },
-  { id: "arequipa", nombre: "Arequipa", lat: -16.4090, lon: -71.5375, tz: "America/Lima" },
-  { id: "trujillo", nombre: "Trujillo", lat: -8.1091, lon: -79.0215, tz: "America/Lima" },
-  { id: "cusco", nombre: "Cusco", lat: -13.5319, lon: -71.9675, tz: "America/Lima" },
-  { id: "piura", nombre: "Piura", lat: -5.1945, lon: -80.6328, tz: "America/Lima" }
+  {
+    id: "lima",
+    nombre: "Lima",
+    lat: -12.0464,
+    lon: -77.0428,
+    tz: "America/Lima",
+  },
+  {
+    id: "arequipa",
+    nombre: "Arequipa",
+    lat: -16.4090,
+    lon: -71.5375,
+    tz: "America/Lima",
+  },
+  {
+    id: "trujillo",
+    nombre: "Trujillo",
+    lat: -8.1091,
+    lon: -79.0215,
+    tz: "America/Lima",
+  },
+  {
+    id: "cusco",
+    nombre: "Cusco",
+    lat: -13.5319,
+    lon: -71.9675,
+    tz: "America/Lima",
+  },
+  {
+    id: "piura",
+    nombre: "Piura",
+    lat: -5.1945,
+    lon: -80.6328,
+    tz: "America/Lima",
+  }
 ],
   es: [
     {
@@ -161,7 +221,15 @@ pe: [
       lon: -3.6067,
       tz: "Europe/Madrid",
     },
+    {
+    id: "malaga",
+    nombre: "Málaga",
+    lat: 36.7213,
+    lon: -4.4214,
+    tz: "Europe/Madrid",
+    },
   ],
+  
   de: [
     {
       id: "berlin",
