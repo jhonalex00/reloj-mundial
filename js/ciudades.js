@@ -44,6 +44,48 @@ const CIUDADES_POR_PAIS = {
       tz: "America/Bogota",
     },
     {
+    id: "rionegro",
+    nombre: "Rionegro",
+    lat: 6.155,
+    lon: -75.3737,
+    tz: "America/Bogota",
+    },
+    {
+    id: "la-ceja",
+    nombre: "La Ceja",
+    lat: 6.0313,
+    lon: -75.4333,
+    tz: "America/Bogota",
+    },
+    {
+    id: "itagui",
+    nombre: "Itagüí",
+    lat: 6.1686,
+    lon: -75.6110,
+    tz: "America/Bogota",
+    },
+    {
+    id: "bello",
+    nombre: "Bello",
+    lat: 6.3373,
+    lon: -75.5579,
+    tz: "America/Bogota",
+    },
+    {
+    id: "la-guajira",
+    nombre: "La Guajira",
+    lat: 11.5444,
+    lon: -72.9072,
+    tz: "America/Bogota",
+    },
+    {
+    id: "turbo",
+    nombre: "Turbo",
+    lat: 8.0926,
+    lon: -76.7282,
+    tz: "America/Bogota",
+    },
+    {
       id: "cali",
       nombre: "Cali",
       lat: 3.4516,
@@ -64,6 +106,7 @@ const CIUDADES_POR_PAIS = {
       lon: -75.4794,
       tz: "America/Bogota",
     },
+    
   ],
   es: [
     {
